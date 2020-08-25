@@ -13,6 +13,8 @@ Le projet s'appuie sur plusieurs technologies Open source :
 * [**Terraform**](https://www.terraform.io/) - outil d'automatisation de construction de ressources.
 * [**Ansible**](https://www.ansible.com/) - plate-forme logicielle libre pour la configuration et la gestion des machines.
 
+### Schéma fonctionnel
+![test](Docs/Schema/infrastructure_schema.png)
 
 ### Installation
 
