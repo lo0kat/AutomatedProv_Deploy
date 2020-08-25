@@ -37,7 +37,7 @@ Le dépôt se présente sous la forme suivante :
 - static_inv . ini (Inventaire des machines)
 - roles (Dossier décrivant les rôles)
 
-_**Important** : Certains mots de passe et noms d'utilisateur étant cryptés, il faudra suivre la [démarche suivante](Docs/Ansible_vault.md) pour en générer de nouveaux avec Ansible-Vault._
+_**Important** : Les champs contenant "##" (ex : "##your_ip" se transforme en "192.168.1.90") sont à modifier pour correspondre à l'environnement de travail. Certains mots de passe et noms d'utilisateur étant cryptés (valeur commençant par !vault), il faudra suivre la [démarche suivante](Docs/Ansible_vault.md) pour en générer de nouveaux avec Ansible-Vault._
 ###  1] Packer 
 
 ##### Commandes (à effectuer dans le répertoire Packer)

@@ -7,6 +7,6 @@ ssh_login : !vault |
           3134313539353162320a363230663966613938613061643032396437656661363436636530306530
           6430
 
-pubkey : ##paste_your_ssh_public_key_here
+pubkey : ##paste_your_ansibleserver_ssh_public_key_here
 
   
