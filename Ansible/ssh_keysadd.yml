@@ -1,0 +1,7 @@
+---
+# INIT SSH KEYS ON ALL SERVERS
+- hosts : all
+  vars_files: roles/common/vars/main.yml
+  remote_user : "{{ssh_login}}"  
+  roles :
+    - sshkey

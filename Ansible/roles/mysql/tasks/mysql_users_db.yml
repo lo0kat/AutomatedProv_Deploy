@@ -1,0 +1,22 @@
+---
+- name : "Create db for all users" 
+  mysql_db:
+        login_user: root
+        login_password: '{{ root_password }}'
+        login_unix_socket: /var/run/mysqld/mysqld.sock 
+        name: "db{{user.login}}"
+        state: present
+
+- name: "Create users with all  privileges (Debian os family)"
+  mysql_user:
+    login_user: root
+    login_password: '{{ root_password }}'
+    name: "u{{ user.login }}"
+    password: "{{ user.pass }}"
+    priv: 'db{{user.login}}.*:ALL'
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock  
+  when: ansible_facts['os_family'] == "Debian"
+  notify: Restart mariadb  
+  
+

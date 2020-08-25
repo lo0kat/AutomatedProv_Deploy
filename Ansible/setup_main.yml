@@ -1,0 +1,32 @@
+---
+# WEB SERVER APACHE + PHP
+- hosts: web  
+  vars_files: roles/common/vars/main.yml
+  remote_user : "{{ssh_login}}"  
+  become: yes # permet d'effectuer les taches avec sudo
+  roles:
+    - web # tasks install apache2 + php
+
+# DATABASE SERVER MYSQL
+- hosts: mysql
+  vars_files: 
+    - roles/common/vars/main.yml
+    - roles/mysql/vars/main.yml
+  become: yes # permet d'effectuer les taches avec sudo
+  remote_user : "{{ssh_login}}"  
+  roles:
+    - mysql # task install mysql
+
+# PHPMYADMIN SERVERS, MYSQL + WEB ROLE REQUIRED 
+- hosts: phpmyadmin
+  vars_files: 
+    - roles/common/vars/main.yml
+    - roles/mysql/vars/main.yml
+  become: yes # permet d'effectuer les taches avec sudo
+  remote_user : "{{ssh_login}}"  
+  roles: # install and config phpmyadmin
+    - web
+    - mysql
+    - phpmyadmin
+ 
+ 

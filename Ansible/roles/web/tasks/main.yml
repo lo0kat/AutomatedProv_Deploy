@@ -1,0 +1,15 @@
+---
+# Apache installation and service starting tasks
+- name: install apache and php last version for (Debian os family)
+  apt:
+    name: ['apache2', 'php', 'php-mysql']
+    state: latest
+    update_cache: yes
+  when: ansible_facts['os_family'] == "Debian" 
+
+- name: ensure apache service is start (Debian os family)
+  service:
+    name: apache2
+    state: started
+    enabled: yes
+  when: ansible_facts['os_family'] == "Debian"

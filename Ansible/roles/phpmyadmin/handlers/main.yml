@@ -1,0 +1,5 @@
+---
+- name: Restart apache2 # Debian os family
+  service:
+    name: apache2
+    state: restarted

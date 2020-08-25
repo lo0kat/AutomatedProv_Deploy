@@ -1,0 +1,7 @@
+---
+# Relance mariadb lors d'une modification
+- name: Restart mariadb # Debian os family
+  service:
+    name: mariadb
+    state: restarted
+

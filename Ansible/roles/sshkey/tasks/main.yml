@@ -1,0 +1,14 @@
+---
+- name: make directory
+  file:
+    path: "/home/{{ssh_login}}/.ssh"
+    state: directory
+- name: create empty file
+  file:
+    path: "/home/{{ssh_login}}/.ssh/authorized_keys"
+    state: touch
+- name: add pubkey
+  lineinfile:
+    path: "/home/{{ssh_login}}/.ssh/authorized_keys"
+    line: "{{ pubkey }}"
+...      

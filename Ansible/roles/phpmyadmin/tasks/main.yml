@@ -1,0 +1,47 @@
+---
+- name: debconf for phpmyadmin 1/5
+  debconf: 
+    name: phpmyadmin 
+    question: phpmyadmin/dbconfig-install 
+    value: 'true' 
+    vtype: boolean
+
+- name: debconf for phpmyadmin 2/5
+  debconf: 
+    name: phpmyadmin 
+    question: phpmyadmin/app-password-confirm 
+    value: '{{root_password}}' 
+    vtype: password
+
+- name: debconf for phpmyadmin 3/5
+  debconf: 
+    name: phpmyadmin 
+    question: phpmyadmin/mysql/admin-pass 
+    value: '{{root_password}}'
+    vtype: password
+
+- name: debconf for phpmyadmin 4/5
+  debconf: 
+    name: phpmyadmin 
+    question: phpmyadmin/mysql/app-pass 
+    value: '{{root_password}}' 
+    vtype: password
+
+- name: debconf for phpmyadmin 5/5
+  debconf: 
+    name: phpmyadmin 
+    question: phpmyadmin/reconfigure-webserver 
+    value: 'apache2' 
+    vtype: multiselect
+
+- name: Install PHPMYADMIN
+  apt: 
+    name: phpmyadmin 
+    state: present
+
+- name: configure site
+  file: 
+    dest: /var/www/phpmyadmin  # fichier modifié
+    src: /usr/share/phpmyadmin # fichier pointé par le lien
+    state: link   
+  notify: Restart apache2

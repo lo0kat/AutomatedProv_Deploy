@@ -1,0 +1,87 @@
+---
+# Mysql installation and service starting tasks
+- name: install mariadb dependencies (Debian os family)
+  apt:
+    update_cache: yes  
+    name: 
+      - software-properties-common
+      #- mysql-server
+      - python3-pip
+      - python-mysqldb 
+      
+      # for mysql_db and mysql_user modules
+    state: present
+  when: ansible_facts['os_family'] == "Debian" 
+
+- name: Install the Python package required for ansible MySQL modules on Ubuntu 16.04
+  pip: 
+    name: pymysql
+  
+
+  
+- name: Add apt key via URL
+  apt_key:
+    url: https://mariadb.org/mariadb_release_signing_key.asc
+    state: present
+    
+- name: Add MariaDB Repo
+  apt_repository:
+    filename: MariaDB-10.5
+    repo: deb [arch=amd64,arm64,ppc64el] http://ftp.igh.cnrs.fr/pub/mariadb/repo/10.5/ubuntu bionic main
+    state: present
+
+- name: install mariadb  (Debian os family)
+  apt:
+    update_cache: yes  
+    name: 
+      - mariadb-server 
+    state: present
+ 
+
+- name: ensure mariadb service is start (Debian os family)
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+  when: ansible_facts['os_family'] == "Debian"
+  
+- name: load local auth socket for mariadb
+  lineinfile:
+    path: "/etc/mysql/mariadb.conf.d/50-server.cnf"
+    insertafter: '[mysqld]'
+    line: "plugin-load-add = auth_socket.so"  
+  notify: Restart mariadb  
+# Read a CSV file and access user 'louis'
+  
+# Example CSV file with header
+#
+#   name,login,pass
+#   louis,u281298,toto974
+#   camille,u281299,toto97438
+  
+- name: Read users from CSV file and return a dictionary
+  read_csv:
+    path: "{{ role_path }}/files/users_etu.csv"
+  register: users
+  delegate_to: localhost
+
+
+- debug:
+    msg: 'User {{ item.name }} has login {{ item.login }} and password {{ item.pass }}'
+  with_items : "{{users.list}}"
+
+- name: Change root password
+  user: 
+    name: root 
+    update_password : always
+    password: "{{ root_password | string | password_hash('sha512') }}"
+  notify: Restart mariadb  
+- debug:
+    msg: 'New root pwd : {{ root_password }} ' 
+
+- name: Create users with all  privileges and create DB (Debian os family)
+  include_tasks: mysql_users_db.yml
+  with_items: "{{users.list}}"
+  loop_control:
+    loop_var: user
+    
